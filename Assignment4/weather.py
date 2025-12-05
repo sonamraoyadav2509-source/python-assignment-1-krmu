@@ -1,0 +1,81 @@
+
+# Weather Data Visualizer
+# Student Name: Sonam Yadav
+# Date: 28 Nov 2025
+# Course: Programming for Problem Solving using Python
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+df = pd.read_csv("weather_data.csv")
+print("----- HEAD -----")
+print(df.head())
+print("----- INFO -----")
+print(df.info())
+print("----- DESCRIBE -----")
+print(df.describe())
+df["date"] = pd.to_datetime(df["date"], errors="coerce")
+df = df.dropna(subset=["date"])
+df["temperature"] = df["temperature"].fillna(df["temperature"].mean())
+df["rainfall"] = df["rainfall"].fillna(0)
+df["humidity"] = df["humidity"].fillna(df["humidity"].mean())
+df["month"] = df["date"].dt.month
+daily_mean = np.mean(df["temperature"])
+daily_min = np.min(df["temperature"])
+daily_max = np.max(df["temperature"])
+daily_std = np.std(df["temperature"])
+print("\nDaily Temperature Stats:")
+print("Mean:", daily_mean)
+print("Min:", daily_min)
+print("Max:", daily_max)
+print("Standard Deviation:", daily_std)
+monthly_stats = df.groupby("month")["temperature"].mean()
+print("\nMonthly Temperature Mean:")
+print(monthly_stats)
+plt.figure(figsize=(10,4))
+plt.plot(df["date"], df["temperature"])
+plt.title("Daily Temperature Trend")
+plt.xlabel("Date")
+plt.ylabel("Temperature (°C)")
+plt.tight_layout()
+plt.savefig("daily_temperature.png")
+plt.close()
+monthly_rainfall = df.groupby("month")["rainfall"].sum()
+plt.figure(figsize=(8,4))
+plt.bar(monthly_rainfall.index, monthly_rainfall.values)
+plt.title("Monthly Rainfall Total")
+plt.xlabel("Month")
+plt.ylabel("Rainfall (mm)")
+plt.tight_layout()
+plt.savefig("monthly_rainfall.png")
+plt.close()
+plt.figure(figsize=(8,4))
+plt.scatter(df["temperature"], df["humidity"])
+plt.title("Humidity vs Temperature")
+plt.xlabel("Temperature (°C)")
+plt.ylabel("Humidity (%)")
+plt.tight_layout()
+plt.savefig("humidity_vs_temperature.png")
+plt.close()
+plt.figure(figsize=(10,5))
+plt.subplot(1,2,1)
+plt.plot(df["date"], df["temperature"])
+plt.title("Temp Trend")
+plt.subplot(1,2,2)
+plt.scatter(df["temperature"], df["humidity"])
+plt.title("Temp vs Humidity")
+plt.tight_layout()
+plt.savefig("combined_plots.png")
+plt.close()
+monthly_agg = df.groupby("month").agg({
+    "temperature": "mean",
+    "rainfall": "sum",
+    "humidity": "mean"
+})
+print("\nMonthly Aggregated Data:")
+print(monthly_agg)
+df.to_csv("cleaned_weather_data.csv", index=False)
+print("\nCleaned file exported as cleaned_weather_data.csv")
+print("Plots saved as PNG images.")
+weather.py
+Displaying weather.py.
