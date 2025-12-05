@@ -77,5 +77,4 @@ print(monthly_agg)
 df.to_csv("cleaned_weather_data.csv", index=False)
 print("\nCleaned file exported as cleaned_weather_data.csv")
 print("Plots saved as PNG images.")
-weather.py
-Displaying weather.py.
+
